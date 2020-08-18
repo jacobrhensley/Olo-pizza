@@ -1,6 +1,8 @@
 "use strict";
 
-let pizzaCombos, toppings = [];
+let toppings = [];
+let combos = [];
+let topTwenty = [];
 
 fetch("./pizzas.json")
     .then(function(resp) {
@@ -8,9 +10,8 @@ fetch("./pizzas.json")
     })
     .then(function(data) {
         function count() {
-            pizzaCombos = data;
 
-        pizzaCombos.forEach(pizza => {
+        data.forEach(pizza => {
             toppings.push(pizza.toppings)
         });
         
@@ -21,7 +22,11 @@ fetch("./pizzas.json")
             for (var i = 0; i < toppings.length; i++) {
                 if (i > 0 && toppings[i].join('') != current.join('')) {
                     if (cnt > 0) {
-                        document.write(current + ' has been ordered: ' + cnt + ' times<br>');
+                        // document.write('<h1>' + current + ' has been ordered: ' + cnt + ' times</h1><br>');
+                        combos.push({
+                            "combo": current,
+                            "orderCount" : cnt
+                        })
                     }
                     cnt = 1;
                     current = toppings[i];
@@ -30,10 +35,32 @@ fetch("./pizzas.json")
                 }
             }
             if (cnt > 0) {
-                document.write(current + ' has been ordered: ' + cnt + ' times');
+                // document.write('<h1>' + current + ' has been ordered: ' + cnt + ' times</h1><br>');
+                combos.push({
+                    "combo": current,
+                    "orderCount" : cnt
+                })
             }
-        
+            // for(let i = 0; i <= combos.length - 1; i++) {
+
+            // }
+
+
+            var insert = "";
+            for(let i = 0; i <= combos.length - 1; i++) {
+                // console.log(combo.combo + ' has been ordered: ' + combo.orderCount + ' times');
+                
+                insert += (`<tr><td>${i + 1}</td><td>${combos[i].combo}</td><td>${combos[i].orderCount}</td></tr>`);
+                // <h3>The combination of:<br>' + combo.combo + '<br>has been ordered: ' + combo.orderCount + ' times<h3>');
+            }
+                var top = document.getElementById('topTwenty');
+
+                top.innerHTML = insert;
+
         }
+
+        
         
         count();
+
     })
