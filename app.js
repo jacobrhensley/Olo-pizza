@@ -22,7 +22,6 @@ fetch("./pizzas.json")
             for (var i = 0; i < toppings.length; i++) {
                 if (i > 0 && toppings[i].join('') != current.join('')) {
                     if (cnt > 0) {
-                        // document.write('<h1>' + current + ' has been ordered: ' + cnt + ' times</h1><br>');
                         combos.push({
                             "combo": current,
                             "orderCount" : cnt
@@ -35,23 +34,27 @@ fetch("./pizzas.json")
                 }
             }
             if (cnt > 0) {
-                // document.write('<h1>' + current + ' has been ordered: ' + cnt + ' times</h1><br>');
                 combos.push({
                     "combo": current,
                     "orderCount" : cnt
                 })
             }
-            // for(let i = 0; i <= combos.length - 1; i++) {
 
-            // }
+            // PUT COMBOS IN DESCENDING ORDER AND SLICE TOP 20
+            combos.sort((a, b) => b.orderCount - a.orderCount);
 
+            combos.forEach((combo) => {
+                console.log(`${combo.orderCount}`);
+                topTwenty.push(combo);
+            });
 
+            topTwenty = topTwenty.slice(0, 20);
+
+            // CREATE HTML TO FORM TABLE
             var insert = "";
-            for(let i = 0; i <= combos.length - 1; i++) {
-                // console.log(combo.combo + ' has been ordered: ' + combo.orderCount + ' times');
+            for(let i = 0; i <= topTwenty.length - 1; i++) {
                 
-                insert += (`<tr><td>${i + 1}</td><td>${combos[i].combo}</td><td>${combos[i].orderCount}</td></tr>`);
-                // <h3>The combination of:<br>' + combo.combo + '<br>has been ordered: ' + combo.orderCount + ' times<h3>');
+                insert += (`<tr><td>${i + 1}</td><td>${topTwenty[i].combo}</td><td>${topTwenty[i].orderCount}</td></tr>`);
             }
                 var top = document.getElementById('topTwenty');
 
@@ -59,8 +62,5 @@ fetch("./pizzas.json")
 
         }
 
-        
-        
         count();
-
     })
